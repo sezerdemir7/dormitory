@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PlayGround Reservation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/sockjs/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        thead th {
+            background-color: #f8f9fa;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mb-4">PlayGround Reservation</h1>
+
+    <h2>All PlayGrounds</h2>
+    <table class="table table-striped" id="all-playgrounds">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Availability</th>
+        </tr>
+        </thead>
+        <tbody id="all-playground-body">
+        <!-- All playgrounds will be listed here -->
+        </tbody>
+    </table>
+
+    <h2>Available PlayGrounds</h2>
+    <table class="table table-success table-striped" id="available-playgrounds">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+        </thead>
+        <tbody id="available-playground-body">
+        <!-- Available playgrounds will be listed here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // WebSocket bağlantısını başlat
+    var socket = new SockJS('http://localhost:8080/ws'); // WebSocket endpoint URL
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function(frame) {
+        console.log('Connected: ' + frame);
+
+        // WebSocket'ten gelen mesajları dinle
+        stompClient.subscribe('/topic/playground-status', function(message) {
+            var playground = JSON.parse(message.body);
+            updatePlaygroundStatus(playground);
+        });
+
+        // Oyun alanlarını getirmek için API çağrısı yap
+        fetch('http://localhost:8080/v1/playground/all')
+            .then(response => response.json())
+            .then(data => {
+                data.data.forEach(playground => {
+                    updatePlaygroundList(playground);
+                });
+            })
+            .catch(error => console.error('Error fetching playgrounds:', error));
+    }, function(error) {
+        console.error('Error connecting to WebSocket', error);
+    });
+
+    // Oyun alanı durumunu güncelle
+    function updatePlaygroundStatus(playground) {
+        var allPlaygroundBody = document.getElementById('all-playground-body');
+        var availablePlaygroundBody = document.getElementById('available-playground-body');
+
+        // Güncel durumu tabloya yansıt
+        var playgroundElement = document.getElementById('playground-' + playground.id);
+        if (playgroundElement) {
+            playgroundElement.innerHTML = `<td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td><td>${playground.isAvailable ? 'Available' : 'Not Available'}</td>`;
+            if (playground.isAvailable) {
+                var availableElement = document.getElementById('available-' + playground.id);
+                if (!availableElement) {
+                    var availableRow = `<tr id="available-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td></tr>`;
+                    availablePlaygroundBody.innerHTML += availableRow;
+                }
+            } else {
+                var availableElement = document.getElementById('available-' + playground.id);
+                if (availableElement) {
+                    availableElement.remove();
+                }
+            }
+        }
+    }
+
+    // Oyun alanlarını sayfada listele
+    function updatePlaygroundList(playground) {
+        var allPlaygroundBody = document.getElementById('all-playground-body');
+        var allRow = `<tr id="playground-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td><td>${playground.isAvailable ? 'Available' : 'Not Available'}</td></tr>`;
+        allPlaygroundBody.innerHTML += allRow;
+
+        if (playground.isAvailable) {
+            var availablePlaygroundBody = document.getElementById('available-playground-body');
+            var availableRow = `<tr id="available-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td></tr>`;
+            availablePlaygroundBody.innerHTML += availableRow;
+        }
+    }
+</script>
+</body>
+</html>
