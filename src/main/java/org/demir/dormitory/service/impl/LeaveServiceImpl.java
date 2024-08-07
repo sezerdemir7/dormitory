@@ -51,13 +51,14 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public void deleteLeave(Long leaveId) {
         Leave leave = findLeaveById(leaveId);
-        leaveRepository.delete(leave);
+        leave.setDeleted(true);
+        leaveRepository.save(leave);
     }
 
 
     @Override
     public List<LeaveResponse> getAllLeave() {
-        List<Leave> leaveList = leaveRepository.findAll();
+        List<Leave> leaveList = leaveRepository.findAllByIsDeletedFalse();
         return mapToResponseList(leaveList);
     }
 

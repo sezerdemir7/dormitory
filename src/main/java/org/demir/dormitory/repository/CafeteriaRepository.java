@@ -1,12 +1,14 @@
 package org.demir.dormitory.repository;
 
 import org.demir.dormitory.entity.Cafeteria;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
-public interface CafeteriaRepository extends JpaRepository<Cafeteria,Long> {
+public interface CafeteriaRepository extends BaseRepository<Cafeteria,Long> {
 
     Optional<Cafeteria> findByName(String cafeteriaName);
+
+
 
 }

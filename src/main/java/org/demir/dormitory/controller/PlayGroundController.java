@@ -22,7 +22,8 @@ public class PlayGroundController {
 
     @GetMapping("/onePlayGround")
     public ApiResponse<PlayGroundResponse> getPlayGroundById(@RequestParam Long id) {
-        return new ApiResponse<>("PlayGround retrieved successfully.", playGroundService.getOnePlayGroundById(id), HttpStatus.FOUND);
+        PlayGroundResponse playGroundResponse=playGroundService.getOnePlayGroundById(id);
+        return new ApiResponse<>("PlayGround retrieved successfully.", playGroundResponse, HttpStatus.FOUND);
     }
 
     @PostMapping("/save")

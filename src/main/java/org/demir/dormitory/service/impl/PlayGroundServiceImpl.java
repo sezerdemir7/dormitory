@@ -33,7 +33,8 @@ public class PlayGroundServiceImpl implements PlayGroundService {
     @Override
     public void deletePlayGround(Long playGroundId) {
         PlayGround playGround = findPlayGroundById(playGroundId);
-        playGroundRepository.delete(playGround);
+        playGround.setDeleted(true);
+        playGroundRepository.save(playGround);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class PlayGroundServiceImpl implements PlayGroundService {
     @Override
     @Transactional
     public List<PlayGroundResponse> getAllPlayGround() {
-        List<PlayGround> playGroundList = playGroundRepository.findAll();
+        List<PlayGround> playGroundList = playGroundRepository.findAllByIsDeletedFalse();
         return mapToResponseList(playGroundList);
     }
 

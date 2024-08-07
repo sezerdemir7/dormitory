@@ -57,7 +57,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<TeacherResponse> getAllTeacher() {
-        List<Teacher> teacherList = teacherRepository.findAll();
+        List<Teacher> teacherList = teacherRepository.findAllByIsDeletedFalse();
         return mapToResponseList(teacherList);
     }
 

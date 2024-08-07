@@ -39,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentResponse> getAllStudent() {
-        List<Student> studentList = studentRepository.findAll();
+        List<Student> studentList = studentRepository.findAllByIsDeletedFalse();
         return mapToResponsList(studentList);
     }
 

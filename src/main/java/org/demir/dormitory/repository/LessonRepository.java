@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface LessonRepository extends JpaRepository<Lesson,Long> {
+public interface LessonRepository extends BaseRepository<Lesson,Long> {
     Optional<Lesson> findByName(String lessonName);
 }

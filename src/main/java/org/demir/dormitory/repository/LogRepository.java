@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface LogRepository extends JpaRepository<Log,Long> {
+public interface LogRepository extends BaseRepository<Log,Long> {
     Optional<List<Log>> findByEntityNameAndEntityId(String entityName, Long entityId);
 
 }

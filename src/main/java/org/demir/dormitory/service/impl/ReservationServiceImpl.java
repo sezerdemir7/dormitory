@@ -61,7 +61,6 @@ public class ReservationServiceImpl implements ReservationService {
     public void deleteReservation(Long reservationId) {
         Reservation reservation = findReservationById(reservationId);
         reservation.setDeleted(true);
-        reservationRepository.delete(reservation);
         reservationRepository.save(reservation);
     }
 
@@ -73,7 +72,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationResponse> getAllReservation() {
-        List<Reservation> reservations = reservationRepository.findAll();
+        List<Reservation> reservations = reservationRepository.findAllByIsDeletedFalse();
         return mapToResponseList(reservations);
     }
 

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface PlayGroundRepository extends JpaRepository<PlayGround,Long> {
+public interface PlayGroundRepository extends BaseRepository<PlayGround,Long> {
     Optional<PlayGround> findByName(String playGroundName);
 
 }

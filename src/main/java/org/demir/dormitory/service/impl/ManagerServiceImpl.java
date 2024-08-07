@@ -54,7 +54,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<ManagerResponse> getAllManagers() {
-        List<Manager> managerList = managerRepository.findAll();
+        List<Manager> managerList = managerRepository.findAllByIsDeletedFalse();
         return mapToResponseList(managerList);
     }
 

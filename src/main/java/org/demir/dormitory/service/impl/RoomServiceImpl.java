@@ -37,7 +37,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomResponse> getAllRoom() {
-        List<Room> roomList=roomRepository.findAll();
+        List<Room> roomList=roomRepository.findAllByIsDeletedFalse();
         return mapToReponseList(roomList);
     }
 

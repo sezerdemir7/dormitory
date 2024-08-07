@@ -45,7 +45,7 @@ public class CafeteriaServiceImpl implements CafeteriaService {
 
     @Override
     public List<CafeteriaResponse> getAllCafeteria() {
-        List<Cafeteria> cafeteriaList = cafeteriaRepository.findAll();
+        List<Cafeteria> cafeteriaList = cafeteriaRepository.findAllByIsDeletedFalse();
         return mapToResponseList(cafeteriaList);
     }
 

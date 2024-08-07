@@ -38,7 +38,8 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void deleteLesson(Long lessonId) {
         Lesson lesson = findLessonById(lessonId);
-        lessonRepository.delete(lesson);
+        lesson.setDeleted(true);
+        lessonRepository.save(lesson);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<LessonResponse> getAllLessons() {
-        List<Lesson> lessonList = lessonRepository.findAll();
+        List<Lesson> lessonList = lessonRepository.findAllByIsDeletedFalse();
         return mapToResponseList(lessonList);
     }
 

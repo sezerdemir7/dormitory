@@ -46,7 +46,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public List<GardenResponse> getAllGarden() {
-        List<Garden> gardenList=gardenRepository.findAll();
+        List<Garden> gardenList=gardenRepository.findAllByIsDeletedFalse();
         return mapToResponseList(gardenList);
     }
 

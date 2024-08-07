@@ -58,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeResponse> getAllEmployees() {
-        List<Employee> employeeList=employeeRepository.findAll();
+        List<Employee> employeeList=employeeRepository.findAllByIsDeletedFalse();
         return mapToResponseList(employeeList);
     }
 

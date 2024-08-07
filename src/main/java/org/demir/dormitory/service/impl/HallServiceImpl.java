@@ -48,7 +48,7 @@ public class HallServiceImpl implements HallService {
 
     @Override
     public List<HallResponse> getAllHalls() {
-        List<Hall> hallList=hallRepository.findAll();
+        List<Hall> hallList=hallRepository.findAllByIsDeletedFalse();
         return mapToResponseList(hallList);
     }
 
