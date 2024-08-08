@@ -11,6 +11,7 @@ import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.ReservationRepository;
 import org.demir.dormitory.service.PlayGroundService;
 
+import org.demir.dormitory.service.RabbitMQProducer;
 import org.demir.dormitory.service.ReservationService;
 import org.demir.dormitory.service.StudentService;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -27,16 +28,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final StudentService studentService;
     private final PlayGroundService playGroundService;
-
+    private final RabbitMQProducer rabbitMQProducer;
 
 
     public ReservationServiceImpl(ReservationRepository reservationRepository, StudentService studentService,
-                                  PlayGroundService playGroundService) {
+                                  PlayGroundService playGroundService, RabbitMQProducer rabbitMQProducer) {
         this.reservationRepository = reservationRepository;
         this.studentService = studentService;
         this.playGroundService = playGroundService;
-
-
+        this.rabbitMQProducer = rabbitMQProducer;
     }
 
     @Override
@@ -98,6 +98,8 @@ public class ReservationServiceImpl implements ReservationService {
         }
         Student student=toUpdate.getStudent();
         String mail=student.getContactInfo().getEmail();
+
+        rabbitMQProducer.sendMailAddressToQueue(mail);
 
         PlayGround playGround=toUpdate.getPlayGround();
         playGround.setAvailable(false);

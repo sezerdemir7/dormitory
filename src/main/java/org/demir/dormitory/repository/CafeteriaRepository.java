@@ -9,6 +9,4 @@ public interface CafeteriaRepository extends BaseRepository<Cafeteria,Long> {
 
     Optional<Cafeteria> findByName(String cafeteriaName);
 
-
-
 }
