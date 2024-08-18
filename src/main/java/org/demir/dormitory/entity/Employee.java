@@ -12,7 +12,7 @@ import org.demir.dormitory.common.EntityListener;
 @Getter
 @Setter
 @EntityListeners(EntityListener.class)
-public class Employee extends BasePerson {
+public class Employee extends BasePerson{
 
     @OneToOne(mappedBy = "employee")
     private Hall hall;
