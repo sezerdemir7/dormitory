@@ -3,12 +3,11 @@ package org.demir.dormitory.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
-import org.demir.dormitory.common.EntityListener;
+import org.demir.dormitory.listener.EntityListener;
 import org.demir.dormitory.common.PlayGroundType;
 
 import java.util.List;

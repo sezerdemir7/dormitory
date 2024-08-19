@@ -5,7 +5,7 @@ import jakarta.persistence.EntityListeners;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
-import org.demir.dormitory.common.EntityListener;
+import org.demir.dormitory.listener.EntityListener;
 
 @Entity
 @Getter

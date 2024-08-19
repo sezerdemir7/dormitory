@@ -7,7 +7,7 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BasePerson;
-import org.demir.dormitory.common.EntityListener;
+import org.demir.dormitory.listener.EntityListener;
 
 @Entity
 @EntityListeners(EntityListener.class)

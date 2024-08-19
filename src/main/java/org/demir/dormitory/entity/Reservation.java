@@ -6,7 +6,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
-import org.demir.dormitory.common.EntityListener;
+import org.demir.dormitory.listener.EntityListener;
 
 import java.time.LocalDateTime;
 
