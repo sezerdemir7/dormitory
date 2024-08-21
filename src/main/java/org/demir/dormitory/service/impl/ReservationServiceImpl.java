@@ -50,11 +50,16 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     public boolean playGroundControl(ReservationRequest request){
-        Reservation reservation=reservationRepository.findTop1ByPlayGroundIdOrderByIdDesc(request.playGroundId());
-        if(reservation!=null && reservation.getEndDate().isBefore(request.startDate())){
-            return false;
+//        Reservation reservation=reservationRepository.findTop1ByPlayGroundIdOrderByIdDesc(request.playGroundId());
+//        if(reservation!=null && reservation.getEndDate().isBefore(request.startDate())){
+//            return false;
+//        }
+//        return true;
+        PlayGround playGround= playGroundService.getPlayGroundById(request.playGroundId());
+        if(playGround.isAvailable()==true ){
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

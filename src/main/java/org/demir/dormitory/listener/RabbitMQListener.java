@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitMQListener {
 
-
     private final EmailService emailService;
 
     public RabbitMQListener(EmailService emailService) {
@@ -19,4 +18,5 @@ public class RabbitMQListener {
     public void listen(String email) {
         emailService.sendEmail(email, "Reservation Approved", "Your reservation has been approved.");
     }
+
 }

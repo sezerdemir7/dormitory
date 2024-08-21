@@ -1,7 +1,6 @@
 package org.demir.dormitory.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
