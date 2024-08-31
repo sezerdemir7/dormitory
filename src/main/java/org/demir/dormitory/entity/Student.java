@@ -1,31 +1,27 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BasePerson;
-import org.demir.dormitory.listener.EntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@EntityListeners(EntityListener.class)
+@Document(collection = "students")
 public class Student extends BasePerson {
 
-    @OneToMany(mappedBy = "student")
+    @DBRef
     private List<Reservation> reservations;
 
-    @OneToMany(mappedBy = "student")
+    @DBRef
     private List<Leave> leaves;
 
-    @OneToMany(mappedBy = "student")
+    @DBRef
     private List<AccessLog> accessLogs;
 
-    @ManyToOne
+    @DBRef
     private Room room;
-
-
-
 }

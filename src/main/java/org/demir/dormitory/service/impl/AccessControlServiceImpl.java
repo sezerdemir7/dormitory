@@ -8,6 +8,7 @@ import org.demir.dormitory.entity.Student;
 import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.repository.AccessLogRepository;
 import org.demir.dormitory.service.AccessControlService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.LeaveService;
 import org.demir.dormitory.service.StudentService;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,14 @@ public class AccessControlServiceImpl implements AccessControlService {
     private final AccessLogRepository accessLogRepository;
     private final StudentService studentService;
     private final LeaveService leaveService;
+    private final IdGeneratorService idGeneratorService;
 
 
-    public AccessControlServiceImpl(AccessLogRepository accessLogRepository, StudentService studentService, LeaveService leaveService) {
+    public AccessControlServiceImpl(AccessLogRepository accessLogRepository, StudentService studentService, LeaveService leaveService, IdGeneratorService idGeneratorService) {
         this.accessLogRepository = accessLogRepository;
         this.studentService = studentService;
         this.leaveService = leaveService;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -34,9 +37,10 @@ public class AccessControlServiceImpl implements AccessControlService {
         Student student=studentService.getStudentById(studentId);
 
         Leave leave= leaveService.getLeaveByStudentId(student.getId());
-
+        Long id=idGeneratorService.generateNextSequenceId("accessLog");
         if(leave==null || leave.getEndDate().isBefore(LocalDateTime.now())){
             AccessLog log=new AccessLog();
+            log.setId(id);
             log.setStudent(student);
             log.setAction(AccessAction.CHECKIN);
             log.setDate(LocalDateTime.now());
@@ -54,10 +58,11 @@ public class AccessControlServiceImpl implements AccessControlService {
 
     @Override
     public String checkOut(Long studentId) {
-
+        Long id=idGeneratorService.generateNextSequenceId("accessLog");
         Student student=studentService.getStudentById(studentId);
 
         AccessLog log=new AccessLog();
+        log.setId(id);
         log.setStudent(student);
         log.setAction(AccessAction.CHECKOUT);
         log.setDate(LocalDateTime.now());

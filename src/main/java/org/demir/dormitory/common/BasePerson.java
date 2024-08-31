@@ -1,15 +1,12 @@
 package org.demir.dormitory.common;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToOne;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import org.demir.dormitory.entity.ContactInfo;
 import org.demir.dormitory.entity.Image;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-@MappedSuperclass
+
 @Getter
 @Setter
 public abstract class BasePerson extends BaseEntity {
@@ -18,11 +15,10 @@ public abstract class BasePerson extends BaseEntity {
 
     private String surname;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contact_info_id", referencedColumnName = "id")
+    @DBRef
     private ContactInfo contactInfo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @DBRef
     private Image image;
 
 }

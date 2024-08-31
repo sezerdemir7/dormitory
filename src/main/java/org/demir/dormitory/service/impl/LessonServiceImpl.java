@@ -8,6 +8,7 @@ import org.demir.dormitory.entity.Lesson;
 import org.demir.dormitory.entity.Teacher;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.LessonRepository;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.LessonService;
 import org.demir.dormitory.service.TeacherService;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,11 @@ public class LessonServiceImpl implements LessonService {
 
     private final LessonRepository lessonRepository;
     private final TeacherService  teacherService;
-
-    public LessonServiceImpl(LessonRepository lessonRepository, TeacherService teacherService) {
+    private final IdGeneratorService idGeneratorService;
+    public LessonServiceImpl(LessonRepository lessonRepository, TeacherService teacherService, IdGeneratorService idGeneratorService) {
         this.lessonRepository = lessonRepository;
         this.teacherService = teacherService;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -87,7 +89,9 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private Lesson mapToLesson(LessonRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("lesson");
         Lesson lesson = new Lesson();
+        lesson.setId(id);
         lesson.setName(request.name());
         lesson.setDescription(request.description());
         return lesson;

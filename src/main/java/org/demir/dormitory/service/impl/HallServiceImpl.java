@@ -12,6 +12,7 @@ import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.HallRepository;
 import org.demir.dormitory.service.EmployeeService;
 import org.demir.dormitory.service.HallService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.StaffService;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +24,11 @@ public class HallServiceImpl implements HallService {
 
     private final HallRepository hallRepository;
     private final StaffService staffService;
-
-    public HallServiceImpl(HallRepository hallRepository, StaffService staffService) {
+    private final IdGeneratorService idGeneratorService;
+    public HallServiceImpl(HallRepository hallRepository, StaffService staffService, IdGeneratorService idGeneratorService) {
         this.hallRepository = hallRepository;
         this.staffService = staffService;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -86,8 +88,10 @@ public class HallServiceImpl implements HallService {
     }
 
     private Hall mapToHall(HallRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("hall");
         Hall hall = new Hall();
         Staff staff=staffService.getStaffById(request.employeeId());
+        hall.setId(id);
         hall.setName(request.name());
         hall.setCapacity(request.capacity());
         hall.setLocation(request.location());

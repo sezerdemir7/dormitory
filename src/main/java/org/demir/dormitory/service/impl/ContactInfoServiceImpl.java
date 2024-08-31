@@ -7,15 +7,17 @@ import org.demir.dormitory.entity.ContactInfo;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.ContactInfoRepository;
 import org.demir.dormitory.service.ContactInfoService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContactInfoServiceImpl implements ContactInfoService {
 
     private final ContactInfoRepository contactInfoRepository;
-
-    public ContactInfoServiceImpl(ContactInfoRepository contactInfoRepository) {
+    private final IdGeneratorService idGeneratorService;
+    public ContactInfoServiceImpl(ContactInfoRepository contactInfoRepository, IdGeneratorService idGeneratorService) {
         this.contactInfoRepository = contactInfoRepository;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -70,7 +72,9 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 
     }
     private ContactInfo mapToContactInfo(ContactInfoRequest request){
+        Long id=idGeneratorService.generateNextSequenceId("contactInfo");
         ContactInfo contactInfo=new ContactInfo();
+        contactInfo.setId(id);
         contactInfo.setEmail(request.email());
         contactInfo.setAddress(request.address());
         contactInfo.setPhoneNumber(request.phoneNumber());

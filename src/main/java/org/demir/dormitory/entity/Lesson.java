@@ -1,28 +1,21 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
-import org.demir.dormitory.listener.EntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-@Entity
 @Getter
 @Setter
-@EntityListeners(EntityListener.class)
+@Document(collection = "lessons")
 public class Lesson extends BaseEntity {
 
     private String name;
     private String description;
-    private int currentStudentCount=0;
+    private int currentStudentCount = 0;
     private int maxStudentCount;
 
-    @OneToOne(mappedBy = "lesson")
+    @DBRef
     private Teacher teacher;
-
-
-
-
 }

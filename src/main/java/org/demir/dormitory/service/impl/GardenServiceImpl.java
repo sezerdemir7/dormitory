@@ -7,6 +7,7 @@ import org.demir.dormitory.entity.Garden;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.GardenRepository;
 import org.demir.dormitory.service.GardenService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,10 @@ import java.util.stream.Collectors;
 @Service
 public class GardenServiceImpl implements GardenService {
     private final GardenRepository gardenRepository;
-
-    public GardenServiceImpl(GardenRepository gardenRepository) {
+    private final IdGeneratorService idGeneratorService;
+    public GardenServiceImpl(GardenRepository gardenRepository, IdGeneratorService idGeneratorService) {
         this.gardenRepository = gardenRepository;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -71,7 +73,9 @@ public class GardenServiceImpl implements GardenService {
     }
 
     private Garden mapToGarden(GardenRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("garden");
         Garden garden=new Garden();
+        garden.setId(id);
         garden.setName(request.name());
         garden.setLocation(request.location());
         return garden;

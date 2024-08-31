@@ -1,43 +1,36 @@
 package org.demir.dormitory.common;
 
-import jakarta.persistence.*;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@MappedSuperclass
 @Getter
 @Setter
 public abstract class BaseEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Version
     private int version;
 
-    @Column(name = "created_date", nullable = false, updatable = false)
+    @CreatedDate
+    @Field(name = "created_date")
     private LocalDateTime createdDate;
 
-    @Column(name = "updated_date", nullable = false)
+    @LastModifiedDate
+    @Field(name = "updated_date")
     private LocalDateTime updatedDate;
 
     private boolean isDeleted;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdDate = LocalDateTime.now();
-        this.updatedDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedDate = LocalDateTime.now();
-    }
-
 
     @Override
     public boolean equals(Object object) {

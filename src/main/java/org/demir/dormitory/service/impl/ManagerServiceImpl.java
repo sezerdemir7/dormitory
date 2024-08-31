@@ -11,6 +11,7 @@ import org.demir.dormitory.entity.*;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.ManagerRepository;
 import org.demir.dormitory.service.ContactInfoService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.ImageService;
 import org.demir.dormitory.service.ManagerService;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,13 @@ public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository managerRepository;
     private final ContactInfoService contactInfoService;
     private final ImageService imageService;
+    private final IdGeneratorService idGeneratorService;
 
-    public ManagerServiceImpl(ManagerRepository managerRepository, ContactInfoService contactInfoService, ImageService imageService) {
+    public ManagerServiceImpl(ManagerRepository managerRepository, ContactInfoService contactInfoService, ImageService imageService, IdGeneratorService idGeneratorService) {
         this.managerRepository = managerRepository;
         this.contactInfoService = contactInfoService;
         this.imageService = imageService;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -112,7 +115,9 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     private Manager mapToManager(ManagerRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("manager");
         Manager manager = new Manager();
+        manager.setId(id);
         manager.setName(request.name());
         manager.setSurname(request.surname());
         manager.setPassword(request.password());

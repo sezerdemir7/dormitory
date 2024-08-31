@@ -13,10 +13,7 @@ import org.demir.dormitory.entity.Room;
 import org.demir.dormitory.entity.Student;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.StudentRepository;
-import org.demir.dormitory.service.ContactInfoService;
-import org.demir.dormitory.service.ImageService;
-import org.demir.dormitory.service.RoomService;
-import org.demir.dormitory.service.StudentService;
+import org.demir.dormitory.service.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,12 +25,15 @@ public class StudentServiceImpl implements StudentService {
     private final ContactInfoService contactInfoService;
     private final RoomService roomService;
     private final ImageService imageService;
+    private final IdGeneratorService idGeneratorService;
 
-    public StudentServiceImpl(StudentRepository studentRepository, ContactInfoService contactInfoService, RoomService roomService, ImageService imageService) {
+
+    public StudentServiceImpl(StudentRepository studentRepository, ContactInfoService contactInfoService, RoomService roomService, ImageService imageService, IdGeneratorService idGeneratorService) {
         this.studentRepository = studentRepository;
         this.contactInfoService = contactInfoService;
         this.roomService = roomService;
         this.imageService = imageService;
+        this.idGeneratorService = idGeneratorService;
     }
 
 
@@ -125,7 +125,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private Student mapToStudent(StudentRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("student");
         Student student = new Student();
+        student.setId(id);
         student.setName(request.name());
         student.setSurname(request.surname());
         return student;

@@ -7,6 +7,7 @@ import org.demir.dormitory.entity.Room;
 import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.RoomRepository;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.RoomService;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
+    private final IdGeneratorService idGeneratorService;
 
-    public RoomServiceImpl(RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomRepository roomRepository, IdGeneratorService idGeneratorService) {
         this.roomRepository = roomRepository;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -89,7 +92,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     private Room mapToRoom(RoomRequest request){
+        Long id=idGeneratorService.generateNextSequenceId("room");
         Room room=new Room();
+        room.setId(id);
         room.setCapacity(request.capacity());
         return room;
     }

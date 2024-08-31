@@ -14,6 +14,7 @@ import org.demir.dormitory.entity.Teacher;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.TeacherRepository;
 import org.demir.dormitory.service.ContactInfoService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.ImageService;
 import org.demir.dormitory.service.TeacherService;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,13 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final ContactInfoService contactInfoService;
     private final ImageService imageService;
+    private final IdGeneratorService idGeneratorService;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, ContactInfoService contactInfoService, ImageService imageService) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, ContactInfoService contactInfoService, ImageService imageService, IdGeneratorService idGeneratorService) {
         this.teacherRepository = teacherRepository;
         this.contactInfoService = contactInfoService;
         this.imageService = imageService;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -119,7 +122,9 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     private Teacher mapToTeacher(TeacherRequest request) {
+        Long id = idGeneratorService.generateNextSequenceId("teacher");
         Teacher teacher = new Teacher();
+        teacher.setId(id);
         teacher.setName(request.name());
         teacher.setSurname(request.surname());
         return teacher;

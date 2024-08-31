@@ -9,6 +9,7 @@ import org.demir.dormitory.entity.Student;
 import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.LeaveRepository;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.LeaveService;
 import org.demir.dormitory.service.StudentService;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,13 @@ public class LeaveServiceImpl implements LeaveService {
 
     private final LeaveRepository leaveRepository;
     private final StudentService studentService;
+    private final IdGeneratorService idGeneratorService;
 
-
-    public LeaveServiceImpl(LeaveRepository leaveRepository, StudentService studentService) {
+    public LeaveServiceImpl(LeaveRepository leaveRepository, StudentService studentService, IdGeneratorService idGeneratorService) {
         this.leaveRepository = leaveRepository;
 
         this.studentService = studentService;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -113,7 +115,9 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     private Leave mapToLeave(LeaveRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("leave");
         Leave leave = new Leave();
+        leave.setId(id);
         leave.setStartDate(request.startDate());
         leave.setEndDate(request.endDate());
         leave.setStudent(findStudentById(request.studentId()));

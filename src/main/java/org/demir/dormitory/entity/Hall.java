@@ -1,18 +1,14 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
-import org.demir.dormitory.listener.EntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-@Entity
 @Getter
 @Setter
-@EntityListeners(EntityListener.class)
+@Document(collection = "halls")
 public class Hall extends BaseEntity {
 
     private String name;
@@ -20,7 +16,6 @@ public class Hall extends BaseEntity {
     private boolean isAvailable = true;
     private int capacity;
 
-    @OneToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    @DBRef
     private Staff staff;
 }

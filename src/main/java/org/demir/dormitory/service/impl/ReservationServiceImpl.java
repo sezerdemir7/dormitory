@@ -10,11 +10,8 @@ import org.demir.dormitory.entity.Student;
 import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.ReservationRepository;
-import org.demir.dormitory.service.PlayGroundService;
+import org.demir.dormitory.service.*;
 
-import org.demir.dormitory.service.RabbitMQProducer;
-import org.demir.dormitory.service.ReservationService;
-import org.demir.dormitory.service.StudentService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -32,15 +29,16 @@ public class ReservationServiceImpl implements ReservationService {
     private final PlayGroundService playGroundService;
     private final RabbitMQProducer rabbitMQProducer;
     private final SimpMessagingTemplate messagingTemplate;
-
+    private final IdGeneratorService idGeneratorService;
 
     public ReservationServiceImpl(ReservationRepository reservationRepository, StudentService studentService,
-                                  PlayGroundService playGroundService, RabbitMQProducer rabbitMQProducer, SimpMessagingTemplate messagingTemplate) {
+                                  PlayGroundService playGroundService, RabbitMQProducer rabbitMQProducer, SimpMessagingTemplate messagingTemplate, IdGeneratorService idGeneratorService) {
         this.reservationRepository = reservationRepository;
         this.studentService = studentService;
         this.playGroundService = playGroundService;
         this.rabbitMQProducer = rabbitMQProducer;
         this.messagingTemplate = messagingTemplate;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -150,7 +148,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private Reservation mapToReservation(ReservationRequest request){
+        Long id=idGeneratorService.generateNextSequenceId("reservation");
         Reservation reservation = new Reservation();
+        reservation.setId(id);
         reservation.setStudent(studentService.getStudentById(request.studentId()));
         reservation.setPlayGround(playGroundService.getPlayGroundById(request.playGroundId()));
         reservation.setStartDate(request.startDate());

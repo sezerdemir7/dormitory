@@ -1,16 +1,13 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.demir.dormitory.common.BaseEntity;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
 @Getter
 @Setter
+@Document(collection = "contact_info")
 public class ContactInfo extends BaseEntity {
 
     private String email;

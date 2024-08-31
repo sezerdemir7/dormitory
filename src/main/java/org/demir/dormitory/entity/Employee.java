@@ -1,19 +1,16 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BasePerson;
-import org.demir.dormitory.listener.EntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
 @Getter
 @Setter
-@EntityListeners(EntityListener.class)
-public class Employee extends BasePerson{
+@Document(collection = "employees")
+public class Employee extends BasePerson {
 
-//    @OneToOne(mappedBy = "employee")
-//    private Hall hall;
+
+    // @DBRef
+    // private Hall hall;
 }

@@ -10,9 +10,11 @@ import org.demir.dormitory.dto.response.StaffResponse;
 import org.demir.dormitory.entity.ContactInfo;
 import org.demir.dormitory.entity.Image;
 import org.demir.dormitory.entity.Staff;
+import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.StaffRepository;
 import org.demir.dormitory.service.ContactInfoService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.ImageService;
 import org.demir.dormitory.service.StaffService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -34,21 +34,24 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final ContactInfoService contactInfoService;
     private final ImageService imageService;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final IdGeneratorService idGeneratorService;
 
     public StaffServiceImpl(StaffRepository staffRepository, ContactInfoService contactInfoService,
-                            ImageService imageService, BCryptPasswordEncoder passwordEncoder) {
+                            ImageService imageService, BCryptPasswordEncoder passwordEncoder, IdGeneratorService idGeneratorService) {
         this.staffRepository = staffRepository;
         this.contactInfoService = contactInfoService;
         this.imageService = imageService;
         this.passwordEncoder = passwordEncoder;
+        this.idGeneratorService = idGeneratorService;
     }
 
 
-    public Optional<Staff> getByUsername(String username){
+    public Optional<Staff> getByUsername(String username) {
         return staffRepository.findByUsername(username);
     }
-    public Staff createUser(StaffRequest request){
-        Staff newStaff= new Staff();
+
+    public Staff createUser(StaffRequest request) {
+        Staff newStaff = new Staff();
 
         newStaff.setName(request.name());
         newStaff.setUsername(request.username());
@@ -67,10 +70,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Staff> user=staffRepository.findByUsername(username);
-        return user.orElseThrow(EntityNotFoundException::new);
+        Optional<Staff> user = staffRepository.findByUsername(username);
+        return user.orElseThrow(() -> new BadRequestException("User not found"));
     }
-
 
 
     @Override
@@ -147,17 +149,17 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public boolean getByMail(String username,String mail) {
-        Optional<Staff> staff=staffRepository.findByUsername(username);
-        ContactInfo contactInfo=contactInfoService.getByMail(mail);
+    public boolean getByMail(String username, String mail) {
+        Optional<Staff> staff = staffRepository.findByUsername(username);
+        ContactInfo contactInfo = contactInfoService.getByMail(mail);
 
-        if(staff.get().getContactInfo()==contactInfo){
+        if (staff.get().getContactInfo() == contactInfo) {
             return true;
         }
         return false;
     }
 
-    private ImageResponse mapToImageResponse(Staff staff, Image image){
+    private ImageResponse mapToImageResponse(Staff staff, Image image) {
         return new ImageResponse(
                 staff.getId(),
                 staff.getName(),
@@ -171,7 +173,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     private Staff mapToStaff(StaffRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("staff");
         Staff staff = new Staff();
+        staff.setId(id);
         staff.setName(request.name());
         staff.setSurname(request.surname());
         staff.setUsername(request.username());

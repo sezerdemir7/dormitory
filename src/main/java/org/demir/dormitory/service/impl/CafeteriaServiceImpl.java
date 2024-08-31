@@ -7,6 +7,7 @@ import org.demir.dormitory.entity.Cafeteria;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.CafeteriaRepository;
 import org.demir.dormitory.service.CafeteriaService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +17,11 @@ import java.util.stream.Collectors;
 public class CafeteriaServiceImpl implements CafeteriaService {
 
     private final CafeteriaRepository cafeteriaRepository;
+    private final IdGeneratorService idGeneratorService;
 
-    public CafeteriaServiceImpl(CafeteriaRepository cafeteriaRepository) {
+    public CafeteriaServiceImpl(CafeteriaRepository cafeteriaRepository, IdGeneratorService idGeneratorService) {
         this.cafeteriaRepository = cafeteriaRepository;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -75,7 +78,9 @@ public class CafeteriaServiceImpl implements CafeteriaService {
     }
 
     private Cafeteria mapToCafeteria(CafeteriaRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("cafeteria");
         Cafeteria cafeteria = new Cafeteria();
+        cafeteria.setId(id);
         cafeteria.setName(request.name());
         cafeteria.setLocation(request.location());
         return cafeteria;

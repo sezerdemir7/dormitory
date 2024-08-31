@@ -1,19 +1,15 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
-import org.demir.dormitory.listener.EntityListener;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
 @Getter
 @Setter
-@EntityListeners(EntityListener.class)
+@Document(collection = "cafeterias")
 public class Cafeteria extends BaseEntity {
 
     private String name;
     private String location;
-
 }

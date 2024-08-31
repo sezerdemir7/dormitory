@@ -6,6 +6,7 @@ import org.demir.dormitory.dto.response.PlayGroundResponse;
 import org.demir.dormitory.entity.PlayGround;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.PlayGroundRepository;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.PlayGroundService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 public class PlayGroundServiceImpl implements PlayGroundService {
 
     private final PlayGroundRepository playGroundRepository;
+    private final IdGeneratorService idGeneratorService;
 
-    public PlayGroundServiceImpl(PlayGroundRepository playGroundRepository) {
+    public PlayGroundServiceImpl(PlayGroundRepository playGroundRepository, IdGeneratorService idGeneratorService) {
         this.playGroundRepository = playGroundRepository;
+        this.idGeneratorService = idGeneratorService;
     }
 
     @Override
@@ -92,7 +95,9 @@ public class PlayGroundServiceImpl implements PlayGroundService {
     }
 
     private PlayGround mapToPlayGround(PlayGroundRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("playground");
         PlayGround playGround = new PlayGround();
+        playGround.setId(id);
         playGround.setName(request.name());
         playGround.setType(request.type());
         return playGround;

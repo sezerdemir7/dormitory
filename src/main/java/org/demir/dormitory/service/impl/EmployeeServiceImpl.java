@@ -15,6 +15,7 @@ import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.EmployeeRepository;
 import org.demir.dormitory.service.ContactInfoService;
 import org.demir.dormitory.service.EmployeeService;
+import org.demir.dormitory.service.IdGeneratorService;
 import org.demir.dormitory.service.ImageService;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ContactInfoService  contactInfoService;
     private final ImageService imageService;
+    private final IdGeneratorService idGeneratorService;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ContactInfoService contactInfoService, ImageService imageService) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ContactInfoService contactInfoService, ImageService imageService, IdGeneratorService idGeneratorService) {
         this.employeeRepository = employeeRepository;
         this.contactInfoService = contactInfoService;
         this.imageService = imageService;
+        this.idGeneratorService = idGeneratorService;
     }
 
 
@@ -120,7 +123,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private Employee mapToEmployee(EmployeeRequest request) {
+        Long id=idGeneratorService.generateNextSequenceId("employee");
         Employee employee = new Employee();
+        employee.setId(id);
         employee.setName(request.name());
         employee.setSurname(request.surname());
         return employee;
