@@ -26,6 +26,7 @@ public interface ManagerService {
     ManagerResponse getOneManagerById(Long managerId);
 
     ContactInfoResponse saveContactInfo(Long managerId, ContactInfoRequest contactInfoRequest);
+
     ImageResponse saveManagerImage(ImageRequest request);
 
     ImageResponse getOneManagerImage(Long managerId);

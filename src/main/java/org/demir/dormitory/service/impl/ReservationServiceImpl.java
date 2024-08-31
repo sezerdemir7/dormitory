@@ -2,6 +2,7 @@ package org.demir.dormitory.service.impl;
 
 import org.demir.dormitory.dto.request.ReservationRequest;
 import org.demir.dormitory.dto.request.ReservationUpdateRequest;
+import org.demir.dormitory.dto.response.PlayGroundResponse;
 import org.demir.dormitory.dto.response.ReservationResponse;
 import org.demir.dormitory.entity.PlayGround;
 import org.demir.dormitory.entity.Reservation;
@@ -14,6 +15,7 @@ import org.demir.dormitory.service.PlayGroundService;
 import org.demir.dormitory.service.RabbitMQProducer;
 import org.demir.dormitory.service.ReservationService;
 import org.demir.dormitory.service.StudentService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +31,16 @@ public class ReservationServiceImpl implements ReservationService {
     private final StudentService studentService;
     private final PlayGroundService playGroundService;
     private final RabbitMQProducer rabbitMQProducer;
+    private final SimpMessagingTemplate messagingTemplate;
 
 
     public ReservationServiceImpl(ReservationRepository reservationRepository, StudentService studentService,
-                                  PlayGroundService playGroundService, RabbitMQProducer rabbitMQProducer) {
+                                  PlayGroundService playGroundService, RabbitMQProducer rabbitMQProducer, SimpMessagingTemplate messagingTemplate) {
         this.reservationRepository = reservationRepository;
         this.studentService = studentService;
         this.playGroundService = playGroundService;
         this.rabbitMQProducer = rabbitMQProducer;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @Override
@@ -108,8 +112,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         PlayGround playGround=toUpdate.getPlayGround();
         playGround.setAvailable(false);
-        playGroundService.save(playGround);
+        PlayGroundResponse playGroundResponse=playGroundService.savePlayGround(playGround);
         toUpdate.setApproved(true);
+
+        messagingTemplate.convertAndSend("/topic/playground-status", playGroundResponse);
+
         Reservation reservation = reservationRepository.save(toUpdate);
         return mapToResponse(reservation);
     }

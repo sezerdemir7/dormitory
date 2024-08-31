@@ -21,4 +21,6 @@ public interface LessonService {
 
     Lesson getLessonById(Long lessonId);
     LessonResponse getOneLessonById(Long lessonId);
+
+    List<LessonResponse> getOneLessonByName(String name);
 }

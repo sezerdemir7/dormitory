@@ -23,4 +23,10 @@ public class EmailServiceImpl implements EmailService {
         message.setText(body);
         mailSender.send(message);
     }
+
+    public void sendVerificationCode(String to, String code) {
+        String subject = "Verification Code";
+        String body = "Your verification code is: " + code;
+        sendEmail(to, subject, body);
+    }
 }

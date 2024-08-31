@@ -53,6 +53,12 @@ public class ContactInfoServiceImpl implements ContactInfoService {
         return mapToResponse(contactInfo);
     }
 
+    @Override
+    public ContactInfo getByMail( String mail) {
+        ContactInfo contactInfo=contactInfoRepository.findByEmail(mail);
+        return contactInfo;
+    }
+
     public ContactInfoResponse mapToResponse(ContactInfo contactInfo){
 
         ContactInfoResponse contactInfoResponse=

@@ -3,8 +3,9 @@
 <head>
     <title>PlayGround Reservation</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/sockjs/1.1.4/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
     <style>
         .container {
             margin-top: 20px;
@@ -56,57 +57,48 @@
 </div>
 
 <script>
-    // WebSocket bağlantısını başlat
+document.addEventListener('DOMContentLoaded', function() {
     var socket = new SockJS('http://localhost:8080/ws'); // WebSocket endpoint URL
     var stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
 
-        // WebSocket'ten gelen mesajları dinle
         stompClient.subscribe('/topic/playground-status', function(message) {
             var playground = JSON.parse(message.body);
             updatePlaygroundStatus(playground);
         });
 
-        // Oyun alanlarını getirmek için API çağrısı yap
-        fetch('http://localhost:8080/v1/playground/all')
-            .then(response => response.json())
-            .then(data => {
-                data.data.forEach(playground => {
-                    updatePlaygroundList(playground);
-                });
-            })
-            .catch(error => console.error('Error fetching playgrounds:', error));
+        fetchPlaygrounds();
     }, function(error) {
         console.error('Error connecting to WebSocket', error);
     });
 
-    // Oyun alanı durumunu güncelle
     function updatePlaygroundStatus(playground) {
         var allPlaygroundBody = document.getElementById('all-playground-body');
         var availablePlaygroundBody = document.getElementById('available-playground-body');
 
-        // Güncel durumu tabloya yansıt
         var playgroundElement = document.getElementById('playground-' + playground.id);
         if (playgroundElement) {
             playgroundElement.innerHTML = `<td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td><td>${playground.isAvailable ? 'Available' : 'Not Available'}</td>`;
-            if (playground.isAvailable) {
-                var availableElement = document.getElementById('available-' + playground.id);
-                if (!availableElement) {
-                    var availableRow = `<tr id="available-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td></tr>`;
-                    availablePlaygroundBody.innerHTML += availableRow;
-                }
-            } else {
-                var availableElement = document.getElementById('available-' + playground.id);
-                if (availableElement) {
-                    availableElement.remove();
-                }
+        } else {
+            var allRow = `<tr id="playground-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td><td>${playground.isAvailable ? 'Available' : 'Not Available'}</td></tr>`;
+            allPlaygroundBody.innerHTML += allRow;
+        }
+
+        var availableElement = document.getElementById('available-' + playground.id);
+        if (playground.isAvailable) {
+            if (!availableElement) {
+                var availableRow = `<tr id="available-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td></tr>`;
+                availablePlaygroundBody.innerHTML += availableRow;
+            }
+        } else {
+            if (availableElement) {
+                availableElement.remove();
             }
         }
     }
 
-    // Oyun alanlarını sayfada listele
     function updatePlaygroundList(playground) {
         var allPlaygroundBody = document.getElementById('all-playground-body');
         var allRow = `<tr id="playground-${playground.id}"><td>${playground.id}</td><td>${playground.name}</td><td>${playground.type}</td><td>${playground.isAvailable ? 'Available' : 'Not Available'}</td></tr>`;
@@ -118,6 +110,18 @@
             availablePlaygroundBody.innerHTML += availableRow;
         }
     }
+
+    function fetchPlaygrounds() {
+        fetch('http://localhost:8080/v1/playground/all')
+            .then(response => response.json())
+            .then(data => {
+                data.data.forEach(playground => {
+                    updatePlaygroundList(playground);
+                });
+            })
+            .catch(error => console.error('Error fetching playgrounds:', error));
+    }
+});
 </script>
 </body>
 </html>

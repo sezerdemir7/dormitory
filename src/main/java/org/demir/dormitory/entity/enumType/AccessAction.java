@@ -1,4 +1,4 @@
-package org.demir.dormitory.common;
+package org.demir.dormitory.entity.enumType;
 
 public enum AccessAction {
     CHECKIN,

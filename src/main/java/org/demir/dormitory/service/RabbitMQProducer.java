@@ -3,6 +3,7 @@ package org.demir.dormitory.service;
 public interface RabbitMQProducer {
 
 
-    public void sendMailAddressToQueue(String mail);
+     void sendMailAddressToQueue(String mail);
 
+    void sendVerificationCodeToQueue(String email, String verificationCode);
 }

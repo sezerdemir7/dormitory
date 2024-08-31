@@ -1,5 +1,6 @@
 package org.demir.dormitory.service.impl;
 
+import org.demir.dormitory.dto.response.PlayGroundResponse;
 import org.demir.dormitory.entity.PlayGround;
 import org.demir.dormitory.entity.Reservation;
 import org.demir.dormitory.repository.ReservationRepository;
@@ -39,8 +40,8 @@ public class ReservationSchedulerService {
                 playGround.setAvailable(true);
                 reservation.setStatus(false);
                 reservationService.save(reservation);
-                playGroundService.save(playGround);
-                messagingTemplate.convertAndSend("/topic/playground-status", playGround);
+                PlayGroundResponse playGroundResponse=playGroundService.savePlayGround(playGround);
+                messagingTemplate.convertAndSend("/topic/playground-status", playGroundResponse);
                 System.out.println("Message sent for playground: " + playGround.getId());
             }
         }

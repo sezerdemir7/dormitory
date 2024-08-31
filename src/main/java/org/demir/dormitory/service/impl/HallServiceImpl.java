@@ -5,10 +5,14 @@ import org.demir.dormitory.dto.request.HallUpdateRequest;
 import org.demir.dormitory.dto.response.HallResponse;
 import org.demir.dormitory.entity.Employee;
 import org.demir.dormitory.entity.Hall;
+import org.demir.dormitory.entity.Staff;
+import org.demir.dormitory.entity.enumType.StaffRole;
+import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.HallRepository;
 import org.demir.dormitory.service.EmployeeService;
 import org.demir.dormitory.service.HallService;
+import org.demir.dormitory.service.StaffService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +22,19 @@ import java.util.stream.Collectors;
 public class HallServiceImpl implements HallService {
 
     private final HallRepository hallRepository;
-    private final EmployeeService employeeService;
+    private final StaffService staffService;
 
-    public HallServiceImpl(HallRepository hallRepository, EmployeeService employeeService) {
+    public HallServiceImpl(HallRepository hallRepository, StaffService staffService) {
         this.hallRepository = hallRepository;
-        this.employeeService = employeeService;
+        this.staffService = staffService;
     }
 
     @Override
     public HallResponse saveHall(HallRequest request) {
         Hall toSave=mapToHall(request);
+        if (!toSave.getStaff().getAuthorities().contains(StaffRole.EMPLOYEE)) {
+            throw new BadRequestException("Only Employees can be responsible for the hall.");
+        }
         Hall hall=hallRepository.save(toSave);
         return mapToResponse(hall);
     }
@@ -80,11 +87,11 @@ public class HallServiceImpl implements HallService {
 
     private Hall mapToHall(HallRequest request) {
         Hall hall = new Hall();
-        Employee employee=employeeService.getEmployeeById(request.employeeId());
+        Staff staff=staffService.getStaffById(request.employeeId());
         hall.setName(request.name());
         hall.setCapacity(request.capacity());
         hall.setLocation(request.location());
-        hall.setEmployee(employee);
+        hall.setStaff(staff);
         return hall;
     }
 
@@ -95,7 +102,7 @@ public class HallServiceImpl implements HallService {
                 hall.getLocation(),
                 hall.isAvailable(),
                 hall.getCapacity(),
-                hall.getEmployee().getId()
+                hall.getStaff().getId()
 
         );
         return response;

@@ -14,6 +14,6 @@ import org.demir.dormitory.listener.EntityListener;
 @EntityListeners(EntityListener.class)
 public class Employee extends BasePerson{
 
-    @OneToOne(mappedBy = "employee")
-    private Hall hall;
+//    @OneToOne(mappedBy = "employee")
+//    private Hall hall;
 }

@@ -3,7 +3,7 @@ package org.demir.dormitory.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.demir.dormitory.common.AccessAction;
+import org.demir.dormitory.entity.enumType.AccessAction;
 import org.demir.dormitory.common.BaseEntity;
 
 import java.time.LocalDateTime;

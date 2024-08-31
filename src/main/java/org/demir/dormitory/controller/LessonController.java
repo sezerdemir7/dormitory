@@ -25,6 +25,11 @@ public class LessonController {
         return new ApiResponse<>("Lesson retrieved successfully.", lessonService.getOneLessonById(id), HttpStatus.FOUND);
     }
 
+    @GetMapping("/lesson")
+    public ApiResponse<List<LessonResponse>> getLessonByName(@RequestParam String name) {
+        return new ApiResponse<>("Lesson retrieved successfully.", lessonService.getOneLessonByName(name), HttpStatus.FOUND);
+    }
+
     @PostMapping("/save")
     public ApiResponse<LessonResponse> saveLesson(@RequestBody LessonRequest request) {
         return new ApiResponse<>("Lesson saved successfully.", lessonService.saveLesson(request), HttpStatus.CREATED);

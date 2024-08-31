@@ -22,5 +22,5 @@ public class Hall extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
-    private Employee employee;
+    private Staff staff;
 }

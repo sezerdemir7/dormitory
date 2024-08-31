@@ -4,7 +4,6 @@ import org.demir.dormitory.dto.request.PlayGroundRequest;
 import org.demir.dormitory.dto.request.PlayGroundUpdateRequest;
 import org.demir.dormitory.dto.response.PlayGroundResponse;
 import org.demir.dormitory.entity.PlayGround;
-import org.demir.dormitory.common.PlayGroundType;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.PlayGroundRepository;
 import org.demir.dormitory.service.PlayGroundService;
@@ -80,6 +79,11 @@ public class PlayGroundServiceImpl implements PlayGroundService {
     @Override
     public void save(PlayGround playGround) {
         playGroundRepository.save(playGround);
+    }
+
+    @Override
+    public PlayGroundResponse savePlayGround(PlayGround playGround) {
+        return mapToResponse(playGroundRepository.save(playGround));
     }
 
     private PlayGround findPlayGroundById(Long playGroundId) {

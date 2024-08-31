@@ -1,6 +1,6 @@
 package org.demir.dormitory.service.impl;
 
-import org.demir.dormitory.common.AccessAction;
+import org.demir.dormitory.entity.enumType.AccessAction;
 import org.demir.dormitory.dto.response.AccessLogResponse;
 import org.demir.dormitory.entity.AccessLog;
 import org.demir.dormitory.entity.Leave;

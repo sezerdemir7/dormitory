@@ -1,7 +1,7 @@
 package org.demir.dormitory.dto.response;
 
 
-import org.demir.dormitory.common.AccessAction;
+import org.demir.dormitory.entity.enumType.AccessAction;
 
 import java.time.LocalDateTime;
 

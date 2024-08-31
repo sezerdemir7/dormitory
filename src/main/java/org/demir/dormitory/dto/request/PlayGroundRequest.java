@@ -1,8 +1,6 @@
 package org.demir.dormitory.dto.request;
 
-import org.demir.dormitory.common.PlayGroundType;
-
-import java.io.Serializable;
+import org.demir.dormitory.entity.enumType.PlayGroundType;
 
 public record PlayGroundRequest(String name, PlayGroundType type)  {
 }

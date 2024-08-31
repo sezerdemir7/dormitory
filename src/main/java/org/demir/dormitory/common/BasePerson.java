@@ -4,8 +4,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.demir.dormitory.entity.ContactInfo;
 import org.demir.dormitory.entity.Image;
 
@@ -13,6 +13,7 @@ import org.demir.dormitory.entity.Image;
 @Getter
 @Setter
 public abstract class BasePerson extends BaseEntity {
+
     private String name;
 
     private String surname;

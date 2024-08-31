@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
 import org.demir.dormitory.listener.EntityListener;
-import org.demir.dormitory.common.PlayGroundType;
+import org.demir.dormitory.entity.enumType.PlayGroundType;
 
 import java.util.List;
 

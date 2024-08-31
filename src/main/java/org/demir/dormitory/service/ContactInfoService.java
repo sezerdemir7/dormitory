@@ -12,5 +12,5 @@ public interface ContactInfoService {
     ContactInfoResponse getContactInfoById(Long contactInfoId);
     ContactInfoResponse updateContactInfo(ContactInfoUpdateRequest request);
     ContactInfoResponse mapToResponse(ContactInfo contactInfo);
-
+    ContactInfo getByMail( String mail);
 }

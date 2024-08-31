@@ -1,6 +1,6 @@
 package org.demir.dormitory.repository;
 
-import org.demir.dormitory.common.AccessAction;
+import org.demir.dormitory.entity.enumType.AccessAction;
 import org.demir.dormitory.entity.AccessLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 

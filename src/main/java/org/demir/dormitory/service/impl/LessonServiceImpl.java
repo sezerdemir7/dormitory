@@ -75,6 +75,12 @@ public class LessonServiceImpl implements LessonService {
         return mapToResponse(lesson);
     }
 
+    @Override
+    public List<LessonResponse> getOneLessonByName(String name) {
+        List<Lesson> lessonList=lessonRepository.findByNameContainingIgnoreCase(name);
+        return mapToResponseList(lessonList);
+    }
+
     private Lesson findLessonById(Long lessonId) {
         return lessonRepository.findById(lessonId).orElseThrow(() ->
                 new NotFoundException("Lesson not found!"));

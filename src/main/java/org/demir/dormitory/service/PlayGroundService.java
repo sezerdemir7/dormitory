@@ -24,4 +24,5 @@ public interface PlayGroundService {
     PlayGroundResponse getOnePlayGroundById(Long playGroundId);
 
     void save(PlayGround playGround);
+    PlayGroundResponse savePlayGround(PlayGround playGround);
 }

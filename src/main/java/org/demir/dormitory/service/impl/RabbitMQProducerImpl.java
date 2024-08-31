@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RabbitMQProducerImpl implements RabbitMQProducer {
+
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
+
     @Value("${rabbitmq.routing.key}")
     private String routingKey;
+
+    @Value("${rabbitmq.verification.routing.key}")
+    private String verificationRoutingKey;
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -20,5 +25,10 @@ public class RabbitMQProducerImpl implements RabbitMQProducer {
 
     public void sendMailAddressToQueue(String mail){
         rabbitTemplate.convertAndSend(exchange, routingKey, mail);
+    }
+
+    public void sendVerificationCodeToQueue(String email, String verificationCode){
+        String message = email + "," + verificationCode;
+        rabbitTemplate.convertAndSend(exchange, verificationRoutingKey, message);
     }
 }
