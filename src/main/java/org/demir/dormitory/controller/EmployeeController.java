@@ -50,6 +50,6 @@ public class EmployeeController {
 
     @PostMapping("/save/contact-info")
     public ApiResponse<ContactInfoResponse> saveContactInfo(@RequestParam Long employeeId, @RequestBody ContactInfoRequest request){
-        return new ApiResponse<>("student info saved",employeeService.saveContactInfo(employeeId,request),HttpStatus.CREATED);
+        return new ApiResponse<>("Employee info saved",employeeService.saveContactInfo(employeeId,request),HttpStatus.CREATED);
     }
 }

@@ -59,6 +59,13 @@ public class ContactInfoServiceImpl implements ContactInfoService {
         return contactInfo;
     }
 
+    @Override
+    public void verifyMail(String mail) {
+        ContactInfo contactInfo=contactInfoRepository.findByEmail(mail);
+        contactInfo.setVerified(true);
+        contactInfoRepository.save(contactInfo);
+    }
+
     public ContactInfoResponse mapToResponse(ContactInfo contactInfo){
 
         ContactInfoResponse contactInfoResponse=

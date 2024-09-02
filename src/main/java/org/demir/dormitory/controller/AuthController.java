@@ -4,6 +4,7 @@ import org.demir.dormitory.dto.request.AuthRequest;
 import org.demir.dormitory.dto.request.StaffRequest;
 import org.demir.dormitory.entity.Staff;
 import org.demir.dormitory.service.AuthService;
+import org.demir.dormitory.service.ContactInfoService;
 import org.demir.dormitory.service.StaffService;
 import org.demir.dormitory.service.VerificationCodeService;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,13 @@ public class AuthController {
     private final StaffService staffService;
     private final AuthService authenticationService;
     private final VerificationCodeService verificationCodeService;
-
-    public AuthController(StaffService staffService, AuthService authenticationService, VerificationCodeService verificationCodeService) {
+    private final ContactInfoService contactInfoService;
+    public AuthController(StaffService staffService, AuthService authenticationService, VerificationCodeService verificationCodeService, ContactInfoService contactInfoService) {
         this.staffService = staffService;
         this.authenticationService = authenticationService;
         this.verificationCodeService = verificationCodeService;
+
+        this.contactInfoService = contactInfoService;
     }
 
     @GetMapping("/welcome")
@@ -29,7 +32,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public Staff addUser(@RequestBody StaffRequest request){
-        return staffService.createUser(request);
+        return staffService.createStaff(request);
     }
 
     @PostMapping("/login")
@@ -42,7 +45,7 @@ public class AuthController {
     public String generateCode(@RequestParam String username,@RequestParam String mail) {
         String code = verificationCodeService.generateMailVerificationCode(username,mail);
 
-        System.out.println("Onaylama kodu: " + code);
+
 
         return "Onaylama kodu gönderildi";
     }
@@ -51,6 +54,7 @@ public class AuthController {
     public String verify(@RequestParam String mail, @RequestParam String code) {
         boolean isVerified = verificationCodeService.verifyMailCode(mail, code);
         if (isVerified) {
+            contactInfoService.verifyMail(mail);
             return "Doğrulama başarılı";
         } else {
             return "Geçersiz onaylama kodu";
@@ -59,13 +63,5 @@ public class AuthController {
 
 
 
-    @GetMapping("/employee")
-    public String getUserString(){
-        return "This is employee";
-    }
 
-    @GetMapping("/manager")
-    public String getAdminString(){
-        return "This is Manager";
-    }
 }

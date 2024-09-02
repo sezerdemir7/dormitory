@@ -40,8 +40,8 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Override
     public String generateMailVerificationCode(String username,String mail) {
-        if (!staffService.getByMail(username,mail)) {
-            throw new BadRequestException("Mail does not exist");
+        if (staffService.checkMail(username,mail)) {
+            throw new BadRequestException("Mail already verified");
         }
 
         String code = String.format("%06d", new Random().nextInt(999999));
@@ -56,6 +56,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Override
     public boolean verifyMailCode(String mail, String code) {
+
         String key = CODE_PREFIX + mail;
         String savedCode = (String) redisTemplate.opsForValue().get(key);
 

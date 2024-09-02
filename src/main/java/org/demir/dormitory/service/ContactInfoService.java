@@ -13,4 +13,6 @@ public interface ContactInfoService {
     ContactInfoResponse updateContactInfo(ContactInfoUpdateRequest request);
     ContactInfoResponse mapToResponse(ContactInfo contactInfo);
     ContactInfo getByMail( String mail);
+
+    void verifyMail(String mail);
 }

@@ -65,4 +65,5 @@ public class StaffController {
     public ApiResponse<ImageResponse> getStaffImage(@RequestParam Long staffId) {
         return new ApiResponse<>("Staff image retrieved successfully.", staffService.getOneStaffImage(staffId), HttpStatus.OK);
     }
+
 }

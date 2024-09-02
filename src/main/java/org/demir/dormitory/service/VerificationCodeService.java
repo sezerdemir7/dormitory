@@ -5,7 +5,7 @@ public interface VerificationCodeService {
     boolean verifyCode(String userId, String code);
 
     String generateMailVerificationCode(String username,String mail);
-    boolean verifyMailCode(String userId, String code);
+    boolean verifyMailCode(String mail, String code);
 
 
 }

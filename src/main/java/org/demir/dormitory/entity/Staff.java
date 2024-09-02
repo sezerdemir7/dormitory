@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @EntityListeners(EntityListener.class)
 public class Staff extends BasePerson implements UserDetails {
 
+    @Column(unique = true)
     private String username;
 
     private String password;

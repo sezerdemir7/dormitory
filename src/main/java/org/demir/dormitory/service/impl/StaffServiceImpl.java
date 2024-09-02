@@ -1,5 +1,6 @@
 package org.demir.dormitory.service.impl;
 
+import jakarta.persistence.EntityExistsException;
 import org.demir.dormitory.dto.request.ContactInfoRequest;
 import org.demir.dormitory.dto.request.ImageRequest;
 import org.demir.dormitory.dto.request.StaffRequest;
@@ -10,6 +11,7 @@ import org.demir.dormitory.dto.response.StaffResponse;
 import org.demir.dormitory.entity.ContactInfo;
 import org.demir.dormitory.entity.Image;
 import org.demir.dormitory.entity.Staff;
+import org.demir.dormitory.exception.BadRequestException;
 import org.demir.dormitory.exception.NotFoundException;
 import org.demir.dormitory.repository.StaffRepository;
 import org.demir.dormitory.service.ContactInfoService;
@@ -47,19 +49,25 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public Optional<Staff> getByUsername(String username){
         return staffRepository.findByUsername(username);
     }
-    public Staff createUser(StaffRequest request){
+    public Staff createStaff(StaffRequest request){
         Staff newStaff= new Staff();
+        if(staffRepository.existsByUsername(request.username())){
+            throw new BadRequestException("Staff username: "+request.username() +",already exists");
+        }
+        else{
+            newStaff.setName(request.name());
+            newStaff.setUsername(request.username());
+            newStaff.setSurname(request.surname());
+            newStaff.setPassword(passwordEncoder.encode(request.password()));
+            newStaff.setAuthorities(request.authorities());
+            newStaff.setAccountNonExpired(true);
+            newStaff.setCredentialsNonExpired(true);
+            newStaff.setEnabled(true);
+            newStaff.setAccountNonLocked(true);
+            return staffRepository.save(newStaff);
+        }
 
-        newStaff.setName(request.name());
-        newStaff.setUsername(request.username());
-        newStaff.setSurname(request.surname());
-        newStaff.setPassword(passwordEncoder.encode(request.password()));
-        newStaff.setAuthorities(request.authorities());
-        newStaff.setAccountNonExpired(true);
-        newStaff.setCredentialsNonExpired(true);
-        newStaff.setEnabled(true);
-        newStaff.setAccountNonLocked(true);
-        return staffRepository.save(newStaff);
+
 
 
     }
@@ -76,6 +84,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     @Override
     public StaffResponse saveStaff(StaffRequest request) {
         Staff toSave = mapToStaff(request);
+        if(staffRepository.existsByUsername(request.username())){
+            throw new EntityExistsException(request.username());
+        }
         Staff staff = staffRepository.save(toSave);
         return mapToResponse(staff);
     }
@@ -147,15 +158,17 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public boolean getByMail(String username,String mail) {
+    public boolean checkMail(String username,String mail) {
         Optional<Staff> staff=staffRepository.findByUsername(username);
         ContactInfo contactInfo=contactInfoService.getByMail(mail);
 
-        if(staff.get().getContactInfo()==contactInfo){
-            return true;
+        if(!(staff.get().getContactInfo()==contactInfo)){
+            throw new BadRequestException("Mail does not exist");
         }
-        return false;
+        return contactInfo.isVerified();
     }
+
+
 
     private ImageResponse mapToImageResponse(Staff staff, Image image){
         return new ImageResponse(

@@ -16,5 +16,6 @@ public class ContactInfo extends BaseEntity {
     private String email;
     private String phoneNumber;
     private String address;
+    private boolean verified = false;
 
 }

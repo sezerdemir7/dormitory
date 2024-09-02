@@ -18,11 +18,11 @@ public interface StaffService extends UserDetailsService {
 
     Optional<Staff> getByUsername(String username);
 
-    boolean getByMail(String username,String mail);
+    boolean checkMail(String username,String mail);
 
     UserDetails loadUserByUsername(String username);
 
-    Staff createUser(StaffRequest request);
+    Staff createStaff(StaffRequest request);
 
     StaffResponse saveStaff(StaffRequest request);
 
@@ -37,10 +37,13 @@ public interface StaffService extends UserDetailsService {
     StaffResponse getOneStaffById(Long staffId);
 
     Staff getStaffById(Long staffId);
+
     ContactInfoResponse saveContactInfo(Long staffId, ContactInfoRequest contactInfoRequest);
 
     ImageResponse getOneStaffImage(Long staffId);
 
     ImageResponse saveStaffImage(ImageRequest request);
+
+
 
 }

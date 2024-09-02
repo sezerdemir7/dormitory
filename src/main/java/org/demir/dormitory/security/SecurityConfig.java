@@ -39,7 +39,8 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/auth/welcome/**","/auth/register/**", "/auth/verify", "/auth/login",
-                                "/auth/generateToken/**",
+                                "/auth/generateToken/**","/auth/generate-verify-code/**",
+                                "auth/**",
                                 "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**",
                                 "/ws/**","/topic/playground-status","/app/**","/topic",
                                 "/v1/reservation/save",
@@ -50,7 +51,6 @@ public class SecurityConfig {
                                 "/v1/leave/save","/v1/leave/update","/v1/leave/delete",
                                 "/v1/leave/oneLeave","v1/leave/approved","v1/leave/unapproved",
                                 "v1/lesson/all","/v1/lesson/oneLesson","/v1/lesson/lesson",
-
                                 "/v1/room/all",
                                 "/v1/cafeteria/all",
                                 "/v1/teacher/all",
@@ -67,7 +67,6 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/v1/teacher/save","v1/teacher/delete","v1/teacher/oneTeacher","v1/teacher/delete",
                                 "v1/teacher/image","v1/teacher/save/contact-info","v1/teacher/save/image",
-                                "/v1/staff/**",
                                 "/v1/manager/save",
                                 "/v1/manager/save/contact-info",
                                 "/v1/manager/save/image"
@@ -88,10 +87,12 @@ public class SecurityConfig {
                                 "v1/cafeteria/oneCafeteria",
                                 "/v1/lesson/update","/v1/lesson/delete","/v1/lesson/save",
                                 "/v1/log/**",
-                                "/v1/staff/**",
                                 "/v1/student/**",
                                 "/api/export"
                         ).hasRole("EMPLOYEE")
+                        .requestMatchers(
+                                "/v1/staff/**"
+                        ).hasAnyRole("MANAGER", "EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
