@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.ReservationRequest;
 import org.demir.dormitory.dto.request.ReservationUpdateRequest;
@@ -36,7 +37,7 @@ public class ReservationController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<ReservationResponse> updateReservation(@RequestBody ReservationUpdateRequest request) {
+    public ApiResponse<ReservationResponse> updateReservation(@RequestBody @Valid ReservationUpdateRequest request) {
         return new ApiResponse<>("Reservation updated successfully.", reservationService.updateReservation(request), HttpStatus.OK);
     }
 

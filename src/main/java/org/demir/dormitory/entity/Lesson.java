@@ -1,8 +1,6 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BaseEntity;
@@ -19,7 +17,8 @@ public class Lesson extends BaseEntity {
     private int currentStudentCount=0;
     private int maxStudentCount;
 
-    @OneToOne(mappedBy = "lesson")
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
 

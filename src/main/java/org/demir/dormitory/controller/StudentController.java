@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.ContactInfoRequest;
 import org.demir.dormitory.dto.request.ImageRequest;
@@ -42,7 +43,7 @@ public class StudentController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<StudentResponse> updateStudent(@RequestBody StudentUpdateRequest request){
+    public ApiResponse<StudentResponse> updateStudent(@RequestBody @Valid StudentUpdateRequest request){
         return new ApiResponse<>("Student updated successfully.", studentService.updateStudent(request), OK);
     }
 

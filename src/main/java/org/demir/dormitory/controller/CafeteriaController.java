@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.CafeteriaRequest;
 import org.demir.dormitory.dto.request.CafeteriaUpdateRequest;
@@ -26,7 +27,7 @@ public class CafeteriaController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<CafeteriaResponse> saveCafeteria(@RequestBody CafeteriaRequest request) {
+    public ApiResponse<CafeteriaResponse> saveCafeteria(@Valid @RequestBody CafeteriaRequest request) {
         return new ApiResponse<>("Cafeteria saved successfully.", cafeteriaService.saveCafeteria(request), HttpStatus.CREATED);
     }
 
@@ -36,7 +37,7 @@ public class CafeteriaController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<CafeteriaResponse> updateCafeteria(@RequestBody CafeteriaUpdateRequest request) {
+    public ApiResponse<CafeteriaResponse> updateCafeteria(@RequestBody @Valid CafeteriaUpdateRequest request) {
         return new ApiResponse<>("Cafeteria updated successfully.", cafeteriaService.updateCafeteria(request), HttpStatus.OK);
     }
 

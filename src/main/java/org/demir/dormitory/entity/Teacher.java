@@ -1,13 +1,13 @@
 package org.demir.dormitory.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 import org.demir.dormitory.common.BasePerson;
 import org.demir.dormitory.listener.EntityListener;
+
+import java.util.Set;
 
 @Entity
 @EntityListeners(EntityListener.class)
@@ -15,7 +15,7 @@ import org.demir.dormitory.listener.EntityListener;
 @Setter
 public class Teacher extends BasePerson {
 
-    @OneToOne
-    private Lesson lesson;
+    @OneToMany(mappedBy = "teacher")
+    private Set<Lesson> lessons;
 
 }

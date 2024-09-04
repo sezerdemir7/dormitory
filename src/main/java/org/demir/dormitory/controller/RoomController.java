@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.RoomRequest;
 import org.demir.dormitory.dto.request.RoomUpdateRequest;
@@ -36,7 +37,7 @@ public class RoomController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<RoomResponse> updateRoom(@RequestBody RoomUpdateRequest request) {
+    public ApiResponse<RoomResponse> updateRoom(@RequestBody @Valid RoomUpdateRequest request) {
         return new ApiResponse<>("Room updated successfully.", roomService.updateRoom(request), HttpStatus.OK);
     }
 

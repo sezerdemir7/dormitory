@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.ContactInfoRequest;
 import org.demir.dormitory.dto.request.ImageRequest;
@@ -33,7 +34,7 @@ public class TeacherController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<TeacherResponse> saveTeacher(@RequestBody TeacherRequest request) {
+    public ApiResponse<TeacherResponse> saveTeacher(@RequestBody @Valid TeacherRequest request) {
         return new ApiResponse<>("Teacher saved successfully.", teacherService.saveTeacher(request), CREATED);
     }
 
@@ -43,7 +44,7 @@ public class TeacherController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<TeacherResponse> updateTeacher(@RequestBody TeacherUpdateRequest request) {
+    public ApiResponse<TeacherResponse> updateTeacher(@RequestBody @Valid TeacherUpdateRequest request) {
         return new ApiResponse<>("Teacher updated successfully.", teacherService.updateTeacher(request), OK);
     }
 

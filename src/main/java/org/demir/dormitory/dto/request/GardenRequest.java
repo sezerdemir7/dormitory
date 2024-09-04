@@ -1,5 +1,13 @@
 package org.demir.dormitory.dto.request;
 
 
-public record GardenRequest(String name, String location){
+import jakarta.validation.constraints.NotBlank;
+
+public record GardenRequest(
+        @NotBlank(message = "Name must not be blank")
+        String name,
+
+        @NotBlank(message = "Location must not be blank")
+        String location
+){
 }

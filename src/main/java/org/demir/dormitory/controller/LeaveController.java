@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.LeaveRequest;
 import org.demir.dormitory.dto.request.LeaveUpdateRequest;
@@ -28,7 +29,7 @@ public class LeaveController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<LeaveResponse> saveLeave(@RequestBody LeaveRequest request) {
+    public ApiResponse<LeaveResponse> saveLeave(@RequestBody @Valid LeaveRequest request) {
         return new ApiResponse<>("Leave saved successfully.", leaveService.saveLeave(request), HttpStatus.CREATED);
     }
 
@@ -38,7 +39,7 @@ public class LeaveController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<LeaveResponse> updateLeave(@RequestBody LeaveUpdateRequest request) {
+    public ApiResponse<LeaveResponse> updateLeave(@RequestBody @Valid LeaveUpdateRequest request) {
         return new ApiResponse<>("Leave updated successfully.", leaveService.updateLeave(request), HttpStatus.OK);
     }
 

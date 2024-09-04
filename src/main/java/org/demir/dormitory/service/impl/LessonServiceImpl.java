@@ -94,18 +94,20 @@ public class LessonServiceImpl implements LessonService {
     }
 
     private LessonResponse mapToResponse(Lesson lesson) {
+        TeacherResponse teacherResponse = null;
+        if (lesson.getTeacher() != null) {
+            teacherResponse = teacherService.getOneTeacherById(lesson.getTeacher().getId());
+        }
         return new LessonResponse(
                 lesson.getId(),
                 lesson.getName(),
                 lesson.getDescription(),
                 lesson.getCurrentStudentCount(),
                 lesson.getMaxStudentCount(),
-                new TeacherResponse(
-                        lesson.getTeacher().getId(),
-                        lesson.getTeacher().getName(),
-                        lesson.getTeacher().getSurname())
+                teacherResponse
         );
     }
+
 
     private List<LessonResponse> mapToResponseList(List<Lesson> lessonList) {
         return lessonList.stream()

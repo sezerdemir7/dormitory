@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.HallRequest;
 import org.demir.dormitory.dto.request.HallUpdateRequest;
@@ -26,7 +27,7 @@ public class HallController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<HallResponse> saveHall(@RequestBody HallRequest request) {
+    public ApiResponse<HallResponse> saveHall(@Valid @RequestBody HallRequest request) {
         return new ApiResponse<>("Hall saved successfully.", hallService.saveHall(request), HttpStatus.CREATED);
     }
 
@@ -36,7 +37,7 @@ public class HallController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<HallResponse> updateHall(@RequestBody HallUpdateRequest request) {
+    public ApiResponse<HallResponse> updateHall(@RequestBody @Valid HallUpdateRequest request) {
         return new ApiResponse<>("Hall updated successfully.", hallService.updateHall(request), HttpStatus.OK);
     }
 

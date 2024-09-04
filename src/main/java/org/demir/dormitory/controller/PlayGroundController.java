@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.PlayGroundRequest;
 import org.demir.dormitory.dto.request.PlayGroundUpdateRequest;
@@ -27,7 +28,7 @@ public class PlayGroundController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<PlayGroundResponse> savePlayGround(@RequestBody PlayGroundRequest request) {
+    public ApiResponse<PlayGroundResponse> savePlayGround(@RequestBody @Valid PlayGroundRequest request) {
         return new ApiResponse<>("PlayGround saved successfully.", playGroundService.savePlayGround(request), HttpStatus.CREATED);
     }
 
@@ -37,7 +38,7 @@ public class PlayGroundController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<PlayGroundResponse> updatePlayGround(@RequestBody PlayGroundUpdateRequest request) {
+    public ApiResponse<PlayGroundResponse> updatePlayGround(@RequestBody @Valid PlayGroundUpdateRequest request) {
         return new ApiResponse<>("PlayGround updated successfully.", playGroundService.updatePlayGround(request), HttpStatus.OK);
     }
 

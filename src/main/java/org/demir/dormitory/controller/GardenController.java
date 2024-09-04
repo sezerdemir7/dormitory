@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.GardenRequest;
 import org.demir.dormitory.dto.request.GardenUpdateRequest;
@@ -26,7 +27,7 @@ public class GardenController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<GardenResponse> saveGarden(@RequestBody GardenRequest request) {
+    public ApiResponse<GardenResponse> saveGarden(@Valid @RequestBody GardenRequest request) {
         return new ApiResponse<>("Garden saved successfully.", gardenService.saveGarden(request), HttpStatus.CREATED);
     }
 
@@ -36,7 +37,7 @@ public class GardenController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<GardenResponse> updateGarden(@RequestBody GardenUpdateRequest request) {
+    public ApiResponse<GardenResponse> updateGarden(@RequestBody @Valid GardenUpdateRequest request) {
         return new ApiResponse<>("Garden updated successfully.", gardenService.updateGarden(request), HttpStatus.OK);
     }
 

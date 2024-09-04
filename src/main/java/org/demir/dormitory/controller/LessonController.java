@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.LessonRequest;
 import org.demir.dormitory.dto.request.LessonUpdateRequest;
@@ -31,7 +32,7 @@ public class LessonController {
     }
 
     @PostMapping("/save")
-    public ApiResponse<LessonResponse> saveLesson(@RequestBody LessonRequest request) {
+    public ApiResponse<LessonResponse> saveLesson(@RequestBody @Valid LessonRequest request) {
         return new ApiResponse<>("Lesson saved successfully.", lessonService.saveLesson(request), HttpStatus.CREATED);
     }
 
@@ -41,7 +42,7 @@ public class LessonController {
     }
 
     @PutMapping("/update")
-    public ApiResponse<LessonResponse> updateLesson(@RequestBody LessonUpdateRequest request) {
+    public ApiResponse<LessonResponse> updateLesson(@RequestBody @Valid LessonUpdateRequest request) {
         return new ApiResponse<>("Lesson updated successfully.", lessonService.updateLesson(request), HttpStatus.OK);
     }
 

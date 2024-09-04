@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.dto.request.AuthRequest;
 import org.demir.dormitory.dto.request.StaffRequest;
 import org.demir.dormitory.entity.Staff;
@@ -31,12 +32,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Staff addUser(@RequestBody StaffRequest request){
+    public Staff addUser(@Valid @RequestBody StaffRequest request){
         return staffService.createStaff(request);
     }
 
     @PostMapping("/login")
-    public String generateToken(@RequestBody AuthRequest request){
+    public String generateToken(@Valid @RequestBody AuthRequest request){
         return authenticationService.generateToken(request);
     }
 
@@ -44,8 +45,6 @@ public class AuthController {
     @PostMapping("/generate-verify-code")
     public String generateCode(@RequestParam String username,@RequestParam String mail) {
         String code = verificationCodeService.generateMailVerificationCode(username,mail);
-
-
 
         return "Onaylama kodu gönderildi";
     }

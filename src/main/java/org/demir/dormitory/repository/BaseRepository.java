@@ -6,6 +6,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import java.util.List;
 import java.util.Optional;
 
+
 @NoRepositoryBean
 public interface BaseRepository<T, ID> extends JpaRepository<T, ID> {
 
@@ -13,6 +14,7 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID> {
 
     Optional<T> findByIdAndIsDeletedFalse(ID id);
 
+    @Override
     default Optional<T> findById(ID id) {
         return findByIdAndIsDeletedFalse(id);
     }

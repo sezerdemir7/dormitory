@@ -1,4 +1,16 @@
 package org.demir.dormitory.dto.request;
 
-public record CafeteriaUpdateRequest(Long id, String name, String location)  {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record CafeteriaUpdateRequest(
+        @NotNull
+        Long id,
+
+        @NotBlank(message = "Name must not be blank")
+        String name,
+
+        @NotBlank(message = "Location must not be blank")
+        String location
+) {
 }

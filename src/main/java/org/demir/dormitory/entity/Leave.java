@@ -20,6 +20,7 @@ public class Leave extends BaseEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean isApproved = false;
+    private boolean hasEnded=false;
 
     @ManyToOne
     private Student student;

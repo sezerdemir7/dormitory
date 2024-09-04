@@ -13,7 +13,6 @@ import org.demir.dormitory.service.LeaveService;
 import org.demir.dormitory.service.StudentService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,13 +25,12 @@ public class LeaveServiceImpl implements LeaveService {
 
     public LeaveServiceImpl(LeaveRepository leaveRepository, StudentService studentService) {
         this.leaveRepository = leaveRepository;
-
         this.studentService = studentService;
     }
 
     @Override
     public LeaveResponse saveLeave(LeaveRequest request) {
-        if(!leaveControl(request.studentId())){
+        if(leaveControl(request.studentId())){
             throw  new BadRequestException("Leave already exists");
         }
         Leave toSave = mapToLeave(request);
@@ -40,12 +38,7 @@ public class LeaveServiceImpl implements LeaveService {
         return mapToResponse(leave);
     }
     private boolean leaveControl(Long studentId){
-        Leave leave=leaveRepository.findTop1ByStudentIdOrderByIdDesc(studentId);
-        if(leave!=null && leave.getEndDate().isBefore(LocalDateTime.now())){
-            return false;
-        }
-        return true;
-
+       return leaveRepository.existsByHasEndedFalseAndStudentId(studentId);
     }
 
     @Override
@@ -58,7 +51,7 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public List<LeaveResponse> getAllLeave() {
-        List<Leave> leaveList = leaveRepository.findAllByIsDeletedFalse();
+        List<Leave> leaveList = leaveRepository.findAllByIsDeletedFalseAndHasEndedFalse();
         return mapToResponseList(leaveList);
     }
 
@@ -83,7 +76,7 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public Leave getLeaveByStudentId(Long studentId) {
-        Leave leave=leaveRepository.findTop1ByStudentIdOrderByIdDesc(studentId);
+        Leave leave=leaveRepository.findByHasEndedFalseAndStudentId(studentId);
         return leave;
     }
 
@@ -97,18 +90,18 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public List<LeaveResponse> getLeavesWhereApprovedTrue() {
-        List<Leave> leaveList=leaveRepository.findLeaveByIsApprovedTrue();
+        List<Leave> leaveList=leaveRepository.findByIsApprovedTrueAndHasEndedFalse();
         return mapToResponseList(leaveList);
     }
 
     @Override
     public List<LeaveResponse> getLeavesWhereApprovedFalse() {
-        List<Leave> leaveList=leaveRepository.findLeaveByIsApprovedFalse();
+        List<Leave> leaveList=leaveRepository.findByIsApprovedFalseAndHasEndedFalse();
         return mapToResponseList(leaveList);
     }
 
     private Leave findLeaveById(Long leaveId) {
-        return leaveRepository.findById(leaveId)
+        return leaveRepository.findByIdAndIsDeletedFalse(leaveId)
                 .orElseThrow(() -> new NotFoundException("Leave not found!"));
     }
 

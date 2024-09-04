@@ -1,5 +1,6 @@
 package org.demir.dormitory.controller;
 
+import jakarta.validation.Valid;
 import org.demir.dormitory.common.ApiResponse;
 import org.demir.dormitory.dto.request.ContactInfoRequest;
 import org.demir.dormitory.dto.request.ContactInfoUpdateRequest;
@@ -32,7 +33,7 @@ public class ContactInfoController {
 
 
     @PutMapping("/update")
-    public ApiResponse<ContactInfoResponse> updateContactInfo(@RequestBody ContactInfoUpdateRequest request) {
+    public ApiResponse<ContactInfoResponse> updateContactInfo(@RequestBody @Valid ContactInfoUpdateRequest request) {
         return new ApiResponse<>("Contact information updated successfully.", contactInfoService.updateContactInfo(request), HttpStatus.OK);
     }
 
