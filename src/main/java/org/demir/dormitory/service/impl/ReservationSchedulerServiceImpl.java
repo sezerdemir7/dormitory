@@ -3,8 +3,8 @@ package org.demir.dormitory.service.impl;
 import org.demir.dormitory.dto.response.PlayGroundResponse;
 import org.demir.dormitory.entity.PlayGround;
 import org.demir.dormitory.entity.Reservation;
-import org.demir.dormitory.repository.ReservationRepository;
 import org.demir.dormitory.service.PlayGroundService;
+import org.demir.dormitory.service.ReservationSchedulerService;
 import org.demir.dormitory.service.ReservationService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,13 +16,13 @@ import java.util.List;
 
 @Service
 @EnableScheduling
-public class ReservationSchedulerService {
+public class ReservationSchedulerServiceImpl implements ReservationSchedulerService {
 
     private final PlayGroundService playGroundService;
     private final SimpMessagingTemplate messagingTemplate;
     private final ReservationService reservationService;
 
-    public ReservationSchedulerService(PlayGroundService playGroundService, SimpMessagingTemplate messagingTemplate, ReservationService reservationService) {
+    public ReservationSchedulerServiceImpl(PlayGroundService playGroundService, SimpMessagingTemplate messagingTemplate, ReservationService reservationService) {
 
         this.playGroundService = playGroundService;
         this.messagingTemplate = messagingTemplate;
