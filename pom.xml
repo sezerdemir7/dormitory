@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.demir</groupId>
-    <artifactId>yurt</artifactId>
+    <artifactId>dormitory</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>yurt</name>
-    <description>yurt</description>
+    <name>dormitory</name>
+    <description>dormitory</description>
     <url/>
     <licenses>
         <license/>
@@ -148,6 +148,10 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
