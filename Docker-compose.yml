@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: dormitory
+    ports:
+      - "5432:5432"
+    networks:
+      - dormitory
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq_
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - dormitory
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - dormitory
+
+  app:
+    image: dormitory-app
+    container_name: dormitory-app
+    environment:
+      SPRING_APPLICATION_NAME: dormitory
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_SHOW_SQL: true
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dormitory
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 12345
+      SPRING_JPA_PROPERTIES_JAVA_X_PERSISTENCE_VALIDATION_MODE: none
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+      RABBITMQ_EXCHANGE_NAME: mail_exchange
+      RABBITMQ_ROUTING_KEY: routing_key
+      RABBITMQ_VERIFICATION_ROUTING_KEY: verification-routing-key
+      RABBITMQ_QUEUE_NAME: demir
+      RABBITMQ_VERIFICATION_QUEUE_NAME: verification_queue
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    networks:
+      - dormitory
+
+networks:
+  dormitory:
+    driver: bridge
