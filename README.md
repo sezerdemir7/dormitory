@@ -42,8 +42,8 @@ This project is a Spring Boot application for managing a dormitory, providing fu
 1. Clone the repository:
 
     ```bash
-    git clone <repository-url>
-    cd dormitory-management-system
+    git clone https://github.com/sezerdemir7/dormitory.git
+    
     ```
 
 2. The project is already set up to use `docker-compose` to run the necessary services: PostgreSQL, RabbitMQ, Redis, and the Spring Boot application.
